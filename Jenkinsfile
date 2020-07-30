@@ -1,14 +1,12 @@
 pipeline {
     agent any 
     stages {
-        stage('Build') { 
+       
+           stage('upload to AWS') { 
             steps {
-                sh' echo " Hello world "'
-            }
-        }
-          stage('upload to AWS') { 
-            steps {
-                sh' echo " Hello AWS "'
+                withAWS(credentials: 'aws-static', region: 'us-east-2') {
+                    sh 'echo "hello KB">hello.txt'
+                    s3Upload acl: 'Public', bucket: 'jenkinsbuket', file: 'index.html'
             }
         } 
     }
